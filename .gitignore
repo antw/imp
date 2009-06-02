@@ -1,5 +1,10 @@
+*.rbc
 *.sw?
 .DS_Store
+.hg
+.hgignore
+.yardoc
 coverage
+doc
 rdoc
 pkg
