@@ -119,11 +119,13 @@ describe Imp::Options::OptionParser do
     end
 
     it 'should be immutable' do
-      lambda { @opts[:new] = :baz }.should raise_error(TypeError, /frozen/)
-      lambda { @opts.leading_non_opts = :baz }.should raise_error(TypeError, /frozen/)
-      lambda { @opts.trailing_non_opts = :baz }.should raise_error(TypeError, /frozen/)
-      lambda { @opts.leading_non_opts << :baz }.should raise_error(TypeError, /frozen/)
-      lambda { @opts.trailing_non_opts << :baz }.should raise_error(TypeError, /frozen/)
+      klass = RUBY_VERSION < '1.9' ? TypeError : RuntimeError
+
+      lambda { @opts[:new] = :baz }.should raise_error(klass, /frozen/)
+      lambda { @opts.leading_non_opts = :baz }.should raise_error(klass, /frozen/)
+      lambda { @opts.trailing_non_opts = :baz }.should raise_error(klass, /frozen/)
+      lambda { @opts.leading_non_opts << :baz }.should raise_error(klass, /frozen/)
+      lambda { @opts.trailing_non_opts << :baz }.should raise_error(klass, /frozen/)
     end
   end
 
@@ -331,28 +333,36 @@ end
 #
 
 describe Imp::Options::Option::Generator do
+  before :each do
+    @methods = if RUBY_VERSION < '1.9'
+      Imp::Options::Option::Generator.instance_methods.map { |m| m.to_sym }
+    else
+      Imp::Options::Option::Generator.instance_methods
+    end
+  end
+
   it 'should have a long method' do
-    Imp::Options::Option::Generator.instance_methods.should include('long')
+    @methods.should include(:long)
   end
 
   it 'should have a short method' do
-    Imp::Options::Option::Generator.instance_methods.should include('short')
+    @methods.should include(:short)
   end
 
   it 'should have a default method' do
-    Imp::Options::Option::Generator.instance_methods.should include('default')
+    @methods.should include(:default)
   end
 
   it 'should have a cast method' do
-    Imp::Options::Option::Generator.instance_methods.should include('cast')
+    @methods.should include(:cast)
   end
 
   it 'should have a description method' do
-    Imp::Options::Option::Generator.instance_methods.should include('description')
+    @methods.should include(:description)
   end
 
   it 'should have a required method' do
-    Imp::Options::Option::Generator.instance_methods.should include('required')
+    @methods.should include(:required)
   end
 end
 
