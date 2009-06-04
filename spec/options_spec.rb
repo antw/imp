@@ -47,9 +47,19 @@ describe Imp::Options::OptionParser do
       parse('--foo')[:foo].should be_true
     end
 
+    it 'should accept --switch=<empty string> assignments' do
+      opt :foo
+      parse('--foo=')[:foo].should == ''
+    end
+
     it 'should accept --switch=<value> assignments' do
       opt :foo
       parse('--foo=bar')[:foo].should == 'bar'
+    end
+
+    it 'should accept --switch=<value with space> assignments' do
+      opt :foo
+      parse('--foo=bar baz')[:foo].should == 'bar baz'
     end
 
     it 'should accept --switch <value> assignments' do
