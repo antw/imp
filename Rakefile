@@ -16,6 +16,8 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end
 
+# Specs & Examples ===========================================================
+
 require 'spec/rake/spectask'
 Spec::Rake::SpecTask.new(:spec) do |spec|
   spec.libs << 'lib' << 'spec'
@@ -46,6 +48,8 @@ end
 
 task :default => :spec
 
+# Documentation ==============================================================
+
 begin
   require 'yard'
   YARD::Rake::YardocTask.new
@@ -55,7 +59,12 @@ rescue LoadError
   end
 end
 
-require 'rake/rdoctask'
+begin
+  require 'hanna/rdoctask'
+rescue LoadError
+  require 'rake/rdoctask'
+end
+
 Rake::RDocTask.new do |rdoc|
   if File.exist?('VERSION.yml')
     config = YAML.load(File.read('VERSION.yml'))

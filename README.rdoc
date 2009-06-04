@@ -1,6 +1,17 @@
-= imp
+= Imp
 
-Description goes here.
+Imp is a simple framework for writing command-line applications, heavily
+inspired by Merb and Sinatra.
+
+== Dependencies
+
+In order to keep Imp as portable as possible, dependencies are kept to a
+minimum. Below is a list of gem dependencies for running Imp.
+
+* *extlib* - The whole of extlib is not loaded; just a couple of helpers like
+  class_inheritable_accessor and inflection. This may be a candidate for
+  removal once the Big Rails Refactor is done, and ActiveSupport is more
+  modular.
 
 == Copyright
 

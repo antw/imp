@@ -1,8 +1,18 @@
 imp = File.join(File.dirname(__FILE__), 'imp', '')
 
+# Core Lib.
 require 'set'
 
+# Gems.
+gem 'extlib'
+require File.join('extlib', 'class')
+require File.join('extlib', 'object')
+require File.join('extlib', 'string')
+require File.join('extlib', 'inflection')
+
+# Load Imp.
 require imp + 'application'
+require imp + 'command'
 require imp + 'options'
 
 module Imp
@@ -19,6 +29,6 @@ module Imp
   class InvalidSwitch < OptionError; end
 
   # Raised when a required option was not present.
-  class Imp::MissingRequiredOption < OptionError; end
+  class MissingRequiredOption < OptionError; end
 
 end
