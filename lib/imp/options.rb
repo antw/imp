@@ -161,12 +161,11 @@ module Imp
     #
     class OptionParser
 
-      NUMERIC             = /(\d*\.\d+|\d+)/
       LONG_SWITCH         = /^(--\w+[-\w+]*)$/              # --switch
       LONG_EQ_SWITCH      = /^(--\w+[-\w+]*|-[a-z])=(.*)$/i # --switch=<value>
       SHORT_SWITCH        = /^(-[a-z])$/i                   # -a
       SHORT_JOINED_SWITCH = /^-([a-z]{2,})$/i               # -abc
-      SHORT_EQ_SWITCH     = /^(-[a-z])#{NUMERIC}$/i         # -n12
+      SHORT_EQ_SWITCH     = /^(-[a-z])(\d*\.\d+|\d+)$/i     # -n12
 
       ##
       # Creates a new OptionParser instance. Expects to be given an array of
