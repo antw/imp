@@ -6,14 +6,16 @@ require 'set'
 # Gems.
 gem 'extlib'
 require File.join('extlib', 'class')
+require File.join('extlib', 'inflection')
+require File.join('extlib', 'nil')
 require File.join('extlib', 'object')
 require File.join('extlib', 'string')
-require File.join('extlib', 'inflection')
 
 # Load Imp.
 require imp + 'application'
 require imp + 'command'
 require imp + 'options'
+require imp + 'router'
 
 module Imp
 

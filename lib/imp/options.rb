@@ -283,10 +283,17 @@ module Imp
       end
 
       ##
+      # Returns if an argument looks like a switch.
+      #
+      def self.is_switch?(arg)
+        arg =~ /^-/
+      end
+
+      ##
       # Returns if the current argument looks like it should be a switch.
       #
       def current_is_switch?
-        peek =~ /^-/
+        self.class.is_switch?(peek)
       end
 
       ##
