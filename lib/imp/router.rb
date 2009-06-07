@@ -16,8 +16,8 @@ module Imp
       # If a matching route can be found, an array will be returned
       # containing:
       #
-      #   - a hash with +:command+ and +:action+ keys
-      #   - an array of arguments with the route segments removes.
+      # * a hash with +:command+ and +:action+ keys
+      # * an array of arguments with the route segments removes.
       #
       # If there was no matching route found, nil will be returned.
       #
