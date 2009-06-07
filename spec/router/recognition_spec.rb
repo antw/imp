@@ -53,33 +53,23 @@ describe 'Route recognition' do
     # Matches.
 
     it 'should route "find" to Find#default' do
-      route = Imp::Router.match(%w( find ))
-      route.command.should == Find
-      route.action.should == :default
+      Imp::Router.match(%w( find )).should route_to(Find, :default)
     end
 
     it 'should route "find all" to Find#all' do
-      route = Imp::Router.match(@args)
-      route.command.should == Find
-      route.action.should == :all
+      Imp::Router.match(@args).should route_to(Find, :all)
     end
 
     it 'should route "find all files" to Find#all' do
-      route = Imp::Router.match(%w( find all files ))
-      route.command.should == Find
-      route.action.should == :all
+      Imp::Router.match(%w( find all files )).should route_to(Find, :all)
     end
 
     it 'should route "find All" to Find#default' do
-      route = Imp::Router.match(%w( find All ))
-      route.command.should == Find
-      route.action.should == :default
+      Imp::Router.match(%w( find All )).should route_to(Find, :default)
     end
 
     it 'should route "find -a all to Find#default"' do
-      route = Imp::Router.match(%w( find -a all ))
-      route.command.should == Find
-      route.action.should == :default
+      Imp::Router.match(%w( find -a all )).should route_to(Find, :default)
     end
 
     # Non-matches.
@@ -110,15 +100,11 @@ describe 'Route recognition' do
     # Matches.
 
     it 'should route "find all" to Find#everything' do
-      route = Imp::Router.match(%w( find all ))
-      route.command.should == Find
-      route.action.should == :everything
+      Imp::Router.match(%w( find all )).should route_to(Find, :everything)
     end
 
     it 'should route "find all files" to Find#everything' do
-      route = Imp::Router.match(%w( find all files ))
-      route.command.should == Find
-      route.action.should == :everything
+      Imp::Router.match(%w( find all files )).should route_to(Find, :everything)
     end
 
     # Non-matches.
@@ -163,15 +149,11 @@ describe 'Route recognition' do
     # Matches.
 
     it 'should route "find all" to FindAll#default' do
-      route = Imp::Router.match(%w( find all ))
-      route.command.should == FindAll
-      route.action.should == :default
+      Imp::Router.match(%w( find all )).should route_to(FindAll, :default)
     end
 
     it 'should route "find all files" to Find#files' do
-      route = Imp::Router.match(%w( find all files ))
-      route.command.should == FindAll
-      route.action.should == :files
+      Imp::Router.match(%w( find all files )).should route_to(FindAll, :files)
     end
 
     # Non-matches.
@@ -214,15 +196,11 @@ describe 'Route recognition' do
     # Matches.
 
     it 'should route "find-all" to Find#everything' do
-      route = Imp::Router.match(%w( find-all ))
-      route.command.should == Find
-      route.action.should == :everything
+      Imp::Router.match(%w( find-all )).should route_to(Find, :everything)
     end
 
     it 'should route "find-all files" to Find#everything' do
-      route = Imp::Router.match(%w( find-all files ))
-      route.command.should == Find
-      route.action.should == :everything
+      Imp::Router.match(%w( find-all files )).should route_to(Find, :everything)
     end
 
     # Non-matches.
