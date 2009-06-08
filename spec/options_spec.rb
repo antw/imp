@@ -83,6 +83,16 @@ describe Imp::Options::OptionParser do
   end
 
   describe 'naming' do
+    it 'should automatically set long switch names if none is specified' do
+      opt :foo
+      parse('--foo')[:foo].should be_true
+    end
+
+    it 'should nicely format auto-set long switch names' do
+      opt :foo__bar
+      parse('--foo-bar')[:foo__bar].should be_true
+    end
+
     it 'should map automatically define short switches to the long name' do
       opt :foo
       parse('-f')[:foo].should be_true
