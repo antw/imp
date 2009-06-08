@@ -7,9 +7,8 @@ module Imp
   #
   module Options
     ##
-    # A Hash extension supporting indifferent access.
-    #
-    # @api private
+    # A Hash extension supporting indifferent access. Uses as +params+ within
+    # command actions.
     #
     class Mash < Hash
       attr_accessor :leading_non_opts, :trailing_non_opts
@@ -28,8 +27,32 @@ module Imp
         super(convert_key(key), value)
       end
 
+      ##
+      # Updates the mashes values with those of the +other+ hash.
+      #
+      # ==== Paramters
+      # other<~each_pair>::
+      #   The other hash/mash whose keys and values are to be merged into the
+      #   receiver.
+      #
+      # ==== Returns
+      # Imp::Options::Mash
+      #
       def update(other)
         other.each_pair { |k, v| self[k] = v }
+        self
+      end
+
+      ##
+      # Freezes the Mash and the non-opts to prevent modification.
+      #
+      # ==== Returns
+      # Imp::Options::Mash
+      #
+      def freeze
+        super
+        @leading_non_opts.freeze
+        @trailing_non_opts.freeze
         self
       end
 
@@ -55,9 +78,14 @@ module Imp
 
       ##
       # Defines a new Option. Requires, at a bare minimum, that a name be
-      # provided. You may further configure the Option by providing a block.
+      # provided.
       #
-      # @api private
+      # ==== Parameters
+      # name<Symbol>::
+      #   A name for the option. This name is used as the key in the +params+
+      #   Mash in Command actions.
+      #
+      # :api: private
       #
       def self.define(name, &blk)
         Generator.new(name).gen(&blk)
@@ -67,18 +95,42 @@ module Imp
         @name = name
       end
 
+      ##
+      # ==== Returns
+      # Boolean:: Returns if this option is required.
+      #
+      # :api: public
       def required?
         @required
       end
 
+      ##
+      # ==== Returns
+      # Boolean::
+      #   Returns if this option expects a numeric value (Imp does not
+      #   differentiate between integers and floats - the value will be cast
+      #   to whatever is appropriate depending on the user input).
+      #
+      # :api: public
       def numeric?
         (! @cast.nil?) && Numeric >= @cast
       end
 
+      ##
+      # ==== Returns
+      # Boolean::
+      #   Returns if this is a boolean option which requires no value.
+      #
+      # :api: public
       def boolean?
         @cast == TrueClass || @cast == FalseClass
       end
 
+      ##
+      # Typecasts the given parameter to whatever is most suitable depending
+      # on the Options +cast+ value.
+      #
+      # :api: private
       def typecast(val)
         if numeric?
           if not val.kind_of?(String)
@@ -102,14 +154,14 @@ module Imp
       # explicitly set, and finishes off by auto-setting the +short+ and
       # +cast+ values if the user has not set them.
       #
-      # @api private
-      #
       class Generator
         ##
         # Creates a new Generator instance.
         #
-        # @param [Symbol] name The name of the option.
+        # ==== Parameters
+        # name<Symbol>:: The name of the option
         #
+        # :api: private
         def initialize(name)
           @option = Option.new(name)
           @set = Set.new
@@ -127,6 +179,9 @@ module Imp
         ##
         # Sets up the Option instance according to the given configuration
         # block.
+        #
+        # ==== Returns
+        # Imp::Option:: The generated Imp::Option instance.
         #
         def gen(&blk)
           instance_eval(&blk) if blk
@@ -168,8 +223,11 @@ module Imp
       SHORT_EQ_SWITCH     = /^(-[a-z])(\d*\.\d+|\d+)$/i     # -n12
 
       ##
-      # Creates a new OptionParser instance. Expects to be given an array of
-      # defined Options.
+      # Creates a new OptionParser instance.
+      #
+      # ==== Parameters
+      # options<~each>::
+      #   Options to be defined for this parser, typically an array.
       #
       def initialize(options = [])
         @options, @shorts = {}, {}
@@ -183,12 +241,22 @@ module Imp
       ##
       # Parses the given +args+.
       #
-      # @param [Array] args
-      #   The arguments to be parsed (typically provided as an array).
+      # ==== Parameters
+      # args<Array>::
+      #   The arguments to be parsed, typically from the command-line.
       #
-      # @return [Imp::Options::Mash]
+      # ==== Returns
+      # Imp::Options::Mash:: The parsed options and their values.
       #
-      # @api private
+      # ==== Raises
+      # Imp::InvalidSwitch::
+      #   An InvalidSwitch will be raised if the supplied arguments contained
+      #   a switch which had not been defined.
+      # Imp::OptionsError::
+      #   An option error will be raised if another error occurs during
+      #   parsing, such as a missing required value.
+      #
+      # :api: private
       #
       def parse(args)
         @args   = args
@@ -196,7 +264,6 @@ module Imp
 
         # Remove leading values which are not a switch (-f or --fxxx).
         results.leading_non_opts << shift until current_is_switch? || @args.empty?
-        results.leading_non_opts.freeze
 
         while current_is_switch?
           case switch = shift
@@ -231,7 +298,7 @@ module Imp
           end
         end
 
-        results.trailing_non_opts = @args.freeze
+        results.trailing_non_opts = @args
 
         # Ensure that the required options are set.
         ensure_required_options_are_set!(results)

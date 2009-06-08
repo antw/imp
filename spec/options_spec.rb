@@ -346,6 +346,35 @@ describe Imp::Options::Mash do
       end
     end
   end
+
+  describe '#freeze' do
+    before :each do
+      @mash = Imp::Options::Mash.new(:one => :two, :foo => :bar)
+      @mash.leading_non_opts = [1, 2, 3]
+      @mash.trailing_non_opts = [4, 5, 6]
+
+      @error_klass = RUBY_VERSION < '1.9' ? TypeError : RuntimeError
+    end
+
+    it 'should return itself' do
+      @mash.freeze.should == @mash
+    end
+
+    it 'should prevent modifications to values' do
+      @mash.freeze
+      lambda { @mash[:one] = :three }.should raise_error(@error_klass)
+    end
+
+    it 'should prevent modifications to leading non-opts' do
+      @mash.freeze
+      lambda { @mash.leading_non_opts << 4 }.should raise_error(@error_klass)
+    end
+
+    it 'should prevent modifications to leading non-opts' do
+      @mash.freeze
+      lambda { @mash.trailing_non_opts << 7 }.should raise_error(@error_klass)
+    end
+  end
 end
 
 #
