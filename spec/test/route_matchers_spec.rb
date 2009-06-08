@@ -8,6 +8,10 @@ describe Imp::Test::Rspec::RouteMatchers do
         @route = Imp::Router::MatchedRoute.new(Find, :all)
       end
 
+      it 'should not pass if tested on nil' do
+        RouteToMatcher.new(Find, :all).matches?(nil).should be_false
+      end
+
       it 'should not pass if the controllers do not match' do
         RouteToMatcher.new(FindAll, :all).matches?(@route).should be_false
       end
@@ -65,6 +69,13 @@ describe Imp::Test::Rspec::RouteMatchers do
         matcher.matches?(@route)
         message = matcher.failure_message_for_should_not
         message.should include('expected not to be a route to FindAll#all')
+      end
+
+      it 'should warn that "nil" was given if matched against nil' do
+        matcher = RouteToMatcher.new(FindAll, :all)
+        matcher.matches?(nil)
+        message = matcher.failure_message_for_should
+        message.should include('but was nil (no matching route found)')
       end
 
       #

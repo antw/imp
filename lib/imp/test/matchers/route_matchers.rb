@@ -37,9 +37,14 @@ module Imp::Test::Rspec::RouteMatchers
     # Failure messages.
 
     def failure_message_for_should
-      'expected route to %s#%s, but was %s#%s' % [
-        @expected_command, @expected_action,
-        @target.command,   @target.action
+      was = if @target.nil?
+        'nil (no matching route found)'
+      else
+        '%s#%s' % [@target.command, @target.action]
+      end
+
+      'expected route to %s#%s, but was %s' % [
+        @expected_command, @expected_action, was
       ]
     end
 
