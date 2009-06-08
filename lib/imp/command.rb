@@ -116,8 +116,10 @@ module Imp
     ##
     # Sets a custom name for the command.
     #
-    # @param [String] name The new name for the command.
-    # @api public
+    # ==== Paramters
+    # name<String>:: The new name for the command
+    #
+    # :api: public
     #
     def self.command(name)
       # Remove the current mapping from the router.
@@ -133,8 +135,10 @@ module Imp
     ##
     # Returns the name of the command as a string.
     #
-    # @return [String]
-    # @api public
+    # ==== Returns
+    # String:: Returns the name of the command.
+    #
+    # :api: public
     #
     def self.command_name
       @_command_name
@@ -147,7 +151,7 @@ module Imp
     ##
     # Performs setup of new Command instances.
     #
-    # @api private
+    # :api: private
     #
     def self.inherited(klass)
       # Set the default command name for the new Command.
