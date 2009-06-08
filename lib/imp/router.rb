@@ -87,6 +87,10 @@ module Imp
       # :api: private
       #
       def register(route, command, action = nil)
+        if @route_map.has_key?(route)
+          raise(Imp::RouterError, "Route name cannot be defined twice: #{route}")
+        end
+
         @route_map[route] = { :command => command, :action => action }
         nil
       end

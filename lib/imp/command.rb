@@ -120,12 +120,14 @@ module Imp
     # @api public
     #
     def self.command(name)
-      # TODO: Remove the current mapping from the router.
+      # Remove the current mapping from the router.
+      Imp::Router.remove(command_name)
 
       # Set the new command name...
       @_command_name = name
 
-      # TODO ... and update the router.
+      # ... and update the router.
+      Imp::Router.register(name, self)
     end
 
     ##

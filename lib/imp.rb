@@ -33,4 +33,7 @@ module Imp
   # Raised when a required option was not present.
   class MissingRequiredOption < OptionError; end
 
+  # Raised when an error happens in the router.
+  class RouterError < ImpError; end
+
 end

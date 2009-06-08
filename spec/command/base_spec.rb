@@ -40,6 +40,10 @@ describe 'Default command names' do
   end
 
   it 'should do something with Name::Spaces'
+
+  it 'should set up a router mapping' do
+    Imp::Router.match(['verysilly']).should route_to(Verysilly, :default)
+  end
 end
 
 describe 'Setting a custom command name' do
@@ -47,7 +51,19 @@ describe 'Setting a custom command name' do
     CustomName.command_name.should == 'hello'
   end
 
-  it 'should remove old router mappings'
-  it 'should add a new router mapping'
-  it 'should raise an error if the command name has already been defined'
+  it 'should remove old router mappings' do
+    Imp::Router.match(['custom name']).should be_nil
+  end
+
+  it 'should add a new router mapping' do
+    Imp::Router.match(['hello']).should route_to(CustomName, :default)
+  end
+
+  it 'should raise an error if the command name has already been defined' do
+    lambda {
+      class DuplicateCommand < Imp::Command
+        command 'hello'
+      end
+    }.should raise_error(Imp::RouterError)
+  end
 end
