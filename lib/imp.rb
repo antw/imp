@@ -14,6 +14,7 @@ require File.join('extlib', 'string')
 # Load Imp.
 require imp + 'application'
 require imp + 'command'
+require imp + 'config'
 require imp + 'options'
 require imp + 'router'
 
