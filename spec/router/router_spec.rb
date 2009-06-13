@@ -1,9 +1,13 @@
-require File.expand_path(File.join(File.dirname(__FILE__), 'spec_helper'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
 # TODO: Most of these specs test private functionality; they ought to be
 #       rewritten to use route recognition, once it is implemented.
 
 describe Imp::Router do
+  after :each do
+    Imp::Router.reset!
+  end
+
   describe '.register' do
     it 'should add the specified route' do
       Imp::Router.register('hello', Class)

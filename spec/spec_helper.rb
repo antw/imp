@@ -10,12 +10,4 @@ Spec::Runner.configure do |config|
   config.include(Imp::Test::RouteHelper)
 end
 
-# TODO: Remove fixtures.
-
-class Find < Imp::Command
-end
-
-class FindAll < Imp::Command
-end
-
-Imp::Router.reset!
+module Imp::Test::Fixtures; end

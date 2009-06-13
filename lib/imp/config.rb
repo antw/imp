@@ -71,6 +71,17 @@ module Imp
       end
 
       ##
+      # Allows setting up a configuration through a block.
+      #
+      # ==== Yields
+      # Hash:: A configuration hash.
+      #
+      def configure
+        yield config
+        nil
+      end
+
+      ##
       # Sets up the config.
       #
       # ==== Parameters

@@ -113,6 +113,9 @@ module Imp
   #
   class Command
 
+    cattr_accessor :_subclasses
+    self._subclasses = Set.new
+
     ##
     # Sets a custom name for the command.
     #
@@ -122,14 +125,8 @@ module Imp
     # :api: public
     #
     def self.command(name)
-      # Remove the current mapping from the router.
-      Imp::Router.remove(command_name)
-
       # Set the new command name...
       @_command_name = name
-
-      # ... and update the router.
-      Imp::Router.register(name, self)
     end
 
     ##
@@ -154,8 +151,11 @@ module Imp
     # :api: private
     #
     def self.inherited(klass)
+      # Add to subclasses list (used to register command with the router).
+      self._subclasses << klass
+
       # Set the default command name for the new Command.
-      klass.command Extlib::Inflection.underscore(klass.to_s).gsub('_', ' ')
+      klass.command Extlib::Inflection.underscore(klass.to_s.split('::').last).gsub('_', ' ')
     end
 
   end # Command

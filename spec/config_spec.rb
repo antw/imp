@@ -5,7 +5,7 @@ describe Imp::Config do
     Imp::Config.setup
   end
 
-  describe '#[]' do
+  describe '.[]' do
     it 'should return a value if the argument matches a key' do
       Imp::Config.setup(:hi => :ho)
       Imp::Config[:hi].should == :ho
@@ -22,7 +22,7 @@ describe Imp::Config do
 
   #
 
-  describe '#[]=' do
+  describe '.[]=' do
     it 'should set a key to the given value' do
       Imp::Config[:hi] = :ho
       Imp::Config[:hi].should == :ho
@@ -42,7 +42,7 @@ describe Imp::Config do
 
   #
 
-  describe '#has_key?' do
+  describe '.has_key?' do
     it 'should return true if the Config has the given key' do
       Imp::Config.has_key?(:in).should be_true
     end
@@ -54,7 +54,7 @@ describe Imp::Config do
 
   #
 
-  describe '#delete' do
+  describe '.delete' do
     it 'should remove the given key and return its value' do
       Imp::Config[:hi] = :ho
       Imp::Config.delete(:hi).should == :ho
@@ -68,7 +68,7 @@ describe Imp::Config do
 
   #
 
-  describe '#fetch' do
+  describe '.fetch' do
     it 'should return the value for the given key' do
       Imp::Config[:hi] = :ho
       Imp::Config.fetch(:hi, :go).should == :ho
@@ -76,6 +76,24 @@ describe Imp::Config do
 
     it 'should return the default if no value is present' do
       Imp::Config.fetch(:hi, :ho).should == :ho
+    end
+  end
+
+  #
+
+  describe '.configure' do
+    it 'should yield something which responds to []=' do
+      Imp::Config.configure do |config|
+        config.should respond_to(:[]=)
+      end
+    end
+
+    it 'should set configuration values' do
+      Imp::Config.configure do |config|
+        config[:hi] = :ho
+      end
+
+      Imp::Config[:hi].should == :ho
     end
   end
 

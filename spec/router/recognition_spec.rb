@@ -1,13 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__), 'spec_helper'))
-
-#
-# TODO: Replace the stuff below with a helper.
-#
-# Imp::Router.match(...).should be_route
-# Imp::Router.match(...).should be_route_to(:command => ...)
-# Imp::Router.match(...).should_not be_route
-# Imp::Router.match(...).should_not be_route_to(:command => ...)
-#
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
 # Shared behaviour.
 describe 'route recognition with extra arguments', :shared => true do
@@ -37,9 +28,19 @@ describe 'route recognition with extra arguments', :shared => true do
   end
 end
 
+class Find < Imp::Command
+end
+
+class FindAll < Imp::Command
+end
+
 # ----------------------------------------------------------------------------
 
 describe 'Route recognition' do
+
+  after :each do
+    Imp::Router.reset!
+  end
 
   #
 
