@@ -113,6 +113,9 @@ module Imp
   #
   class Command
 
+    class_inheritable_accessor :_arguments
+    self._arguments = []
+
     cattr_accessor :_subclasses
     self._subclasses = Set.new
 
@@ -139,6 +142,17 @@ module Imp
     #
     def self.command_name
       @_command_name
+    end
+
+    ##
+    # Adds a new argument to the command. See the Arguments section for
+    # Imp::Command for more information.
+    #
+    # ==== Parameters
+    # name<Symbol>:: A name for the argument.
+    #
+    def self.arg(name, &configuration)
+      _arguments << Imp::Options::Option.define(name, &configuration)
     end
 
     #######
