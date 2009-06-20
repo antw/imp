@@ -194,6 +194,8 @@ module Imp
     #
     # ==== Returns
     # Imp::Options::Mash
+    # 
+    # :api: public
     #
     def arguments
       @_arguments
