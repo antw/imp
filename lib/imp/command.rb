@@ -151,8 +151,52 @@ module Imp
     # ==== Parameters
     # name<Symbol>:: A name for the argument.
     #
+    # :api: public
+    #
     def self.arg(name, &configuration)
       _arguments << Imp::Options::Option.define(name, &configuration)
+    end
+
+    ##
+    # Creates a new Command instance.
+    #
+    # ==== Parameters
+    # arguments<Array>:: An array of arguments to be parsed.
+    #
+    # :api: plugin
+    #
+    def initialize(arguments)
+      @_unparsed_arguments = arguments
+    end
+
+    ##
+    # Parses arguments and dispatches the given +action+.
+    #
+    # ==== Parameters
+    # action<Symbol>:: The action to dispatch.
+    #
+    # :api: plugin
+    #
+    def _dispatch(action)
+      arg_parser  = Imp::Options::OptionParser.new(self.class._arguments)
+      @_arguments = arg_parser.parse(@_unparsed_arguments)
+
+      if respond_to?(action)
+        send(action)
+      else
+        raise Imp::ActionNotFound,
+          "Action '#{action}' was not found in #{self.class}"
+      end
+    end
+
+    ##
+    # Returns the parsed arguments.
+    #
+    # ==== Returns
+    # Imp::Options::Mash
+    #
+    def arguments
+      @_arguments
     end
 
     #######

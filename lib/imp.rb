@@ -40,6 +40,9 @@ module Imp
   # Raised when an error happens in the router.
   class RouterError < ImpError; end
 
+  # Raised when attempting to dispatch to an action which does not exist.
+  class ActionNotFound < ImpError; end
+
   ##
   # Loads an application at the given path. Expect to be given either a path
   # to directory containing containing an imp.rb file, and your command files.
