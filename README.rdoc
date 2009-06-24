@@ -1,17 +1,29 @@
 = Imp
 
-Imp is a simple framework for writing command-line applications, heavily
-inspired by Merb and Sinatra.
+Inspired by Merb and Sinatra, Imp is a Ruby framework which aims to simplify
+development of command-line applications.
 
-== Dependencies
+Imp allows you to define 'commands', much like you might define a controller
+in a web framework, each of which contain actions. Imp then runs a particular
+command and action depending on the command line arguments.
 
-In order to keep Imp as portable as possible, dependencies are kept to a
-minimum. Below is a list of gem dependencies for running Imp.
+For example, assuming your executable is called 'mybin'...
 
-* *extlib* - The whole of extlib is not loaded; just a couple of helpers like
-  class_inheritable_accessor and inflection. This may be a candidate for
-  removal once the Big Rails Refactor is done, and ActiveSupport is more
-  modular.
+    $ mybin find audio
+
+... would be mapped to the 'audio' action on the 'Find' command. Also provided
+is a handy DSL for parsing other command-line arguments. See the documentation
+for Imp::Command for more information on both commands and arguments.
+
+== Development Status
+
+Imp is still in the early stages of development and is not yet ready for use.
+Many of the core concepts (commands/argument parsing) are implemented, but
+application generation and input/output are not yet completed.
+
+== Tests
+
+Tested on Ruby 1.8.6, 1.8.7, 1.9.1 and JRuby 1.2.0.
 
 == Copyright
 
